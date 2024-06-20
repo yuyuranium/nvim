@@ -1,5 +1,3 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- AstroLSP allows you to customize the features in AstroNvim's LSP configuration engine
 -- Configuration documentation can be found with `:h astrolsp`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
@@ -93,6 +91,14 @@ return {
           cond = function(client)
             return client.supports_method "textDocument/semanticTokens/full" and vim.lsp.semantic_tokens ~= nil
           end,
+        },
+        ["<Leader>lj"] = {
+          function() vim.diagnostic.goto_next() end,
+          desc = "Next diagnostic",
+        },
+        ["<Leader>lk"] = {
+          function() vim.diagnostic.goto_prev() end,
+          desc = "Previous diagnostic",
         },
       },
     },
