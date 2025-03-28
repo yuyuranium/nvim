@@ -42,4 +42,13 @@ return {
     "yuyuranium/vim-bsv",
     event = "BufRead",
   },
+  {
+    "folke/todo-comments.nvim",
+    event = "VeryLazy",
+    opts = {
+      highlight = {
+        pattern = [[.*<(KEYWORDS).*:]],
+      },
+    },
+  },
 }

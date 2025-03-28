@@ -1,22 +1,30 @@
+local function get_format_setting(textwidth, shiftwidth)
+  return function()
+    textwidth = textwidth or 80
+    shiftwidth = shiftwidth or 2
+    vim.opt_local.textwidth = textwidth
+    vim.opt_local.colorcolumn = { textwidth }
+    vim.opt_local.shiftwidth = shiftwidth
+    vim.opt_local.tabstop = shiftwidth
+  end
+end
+
 local autocmds = {
   format_option = {
     {
       event = "FileType",
       pattern = { "c", "cpp" },
-      callback = function()
-        vim.opt_local.textwidth = 80
-        vim.opt_local.colorcolumn = { 80 }
-        vim.opt_local.shiftwidth = 2
-        vim.opt_local.tabstop = 2
-      end,
+      callback = get_format_setting(80, 2),
+    },
+    {
+      event = "FileType",
+      pattern = { "lua", "bsv" },
+      callback = get_format_setting(100, 2),
     },
     {
       event = "FileType",
       pattern = { "gitcommit" },
-      callback = function()
-        vim.opt_local.textwidth = 72
-        vim.opt_local.colorcolumn = { 72 }
-      end,
+      callback = get_format_setting(72),
     },
     {
       event = "FileType",
