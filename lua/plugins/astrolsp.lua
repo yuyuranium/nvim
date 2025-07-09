@@ -37,9 +37,10 @@ return {
       -- end
     },
     -- enable servers that you already have installed without mason
-    servers = {
-      -- "pyright"
-    },
+    servers = vim.fn.filereadable("/etc/NIXOS") == 1 and {
+      "clangd",
+      "nil_ls",
+    } or {},
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {

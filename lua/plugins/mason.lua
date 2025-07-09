@@ -8,8 +8,6 @@ return {
     -- overrides `require("mason-lspconfig").setup(...)`
     opts = {
       ensure_installed = {
-        "lua_ls",
-        "clangd",
         -- add more arguments for adding more language servers
       },
     },
