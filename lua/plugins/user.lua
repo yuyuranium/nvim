@@ -26,15 +26,16 @@ return {
     },
   },
   {
-    "nvim-tree/nvim-web-devicons",
+    -- AstroNvim v6 uses mini.icons (it mocks nvim-web-devicons), so the custom bsv
+    -- icon is registered here by filetype and extension. mini.icons colors via
+    -- highlight groups; MiniIconsBlue approximates the previous #51a0cf.
+    "nvim-mini/mini.icons",
     opts = {
-      override = {
-        bsv = {
-          icon = "󰘚",
-          color = "#51a0cf",
-          cterm_color = "74",
-          name = "BSV",
-        },
+      filetype = {
+        bsv = { glyph = "󰘚", hl = "MiniIconsBlue" },
+      },
+      extension = {
+        bsv = { glyph = "󰘚", hl = "MiniIconsBlue" },
       },
     },
   },
@@ -50,5 +51,11 @@ return {
         pattern = [[.*<(KEYWORDS).*:]],
       },
     },
+  },
+  {
+    "chomosuke/typst-preview.nvim",
+    lazy = false, -- or ft = 'typst'
+    version = "1.*",
+    opts = {}, -- lazy.nvim will implicitly calls `setup {}`
   },
 }

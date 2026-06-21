@@ -41,6 +41,22 @@ local autocmds = {
       callback = function() vim.opt_local.formatoptions = vim.opt_local.formatoptions - "r" - "o" end,
     },
   },
+  -- OSC52Yank = {
+  --   {
+  --     event = "TextYankPost",
+  --     desc = "Send yanked text to terminal via OSC 52",
+  --     callback = function()
+  --       local event = vim.v.event
+  --       -- Trigger only with explicit yank operator 'y'
+  --       if event.operator == "y" then
+  --         local text = table.concat(event.regcontents, "\n")
+  --         local b64 = vim.base64.encode(text) -- Requires Neovim 0.10+
+  --         local osc52_seq = string.format("\x1b]52;c;%s\x07", b64)
+  --         io.stderr:write(osc52_seq)
+  --       end
+  --     end,
+  --   },
+  -- },
 }
 
 return {

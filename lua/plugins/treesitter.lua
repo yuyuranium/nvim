@@ -1,32 +1,43 @@
 -- Customize Treesitter
+-- NOTE: AstroNvim v6 uses the `main` branch of nvim-treesitter, which is now just a
+-- parser-download utility. Treesitter features (highlight/indent/textobjects) are
+-- configured through AstroCore's `treesitter` table instead of nvim-treesitter itself.
 
 ---@type LazySpec
 return {
-  "nvim-treesitter/nvim-treesitter",
-  opts = function(_, opts)
-    opts.ensure_install = {
-      "lua",
-      "vim",
-      "cpp",
-      "c",
-    }
-    local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-    parser_config.bsv = {
-      install_info = {
-        url = "https://github.com/yuyuranium/tree-sitter-bsv", -- local path or git repo
-        files = { "src/parser.c" }, -- note that some parsers also require src/scanner.c or src/scanner.cc
-        -- optional entries:
-        branch = "main", -- default branch in case of git repo if different from master
-        generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-        requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
+  -- Treesitter features + parsers to ensure are installed.
+  -- The `c`, `lua`, and `vim` parsers are already in AstroNvim's defaults; AstroCore
+  -- extends (not replaces) `ensure_installed`, so we only need to add the extras.
+  {
+    "AstroNvim/astrocore",
+    ---@type AstroCoreOpts
+    opts = {
+      treesitter = {
+        ensure_installed = {
+          "cpp",
+        },
       },
-      filetype = "bsv", -- if filetype does not match the parser name
-    }
-  end,
-  dependencies = {
-    {
-      "nvim-treesitter/playground",
-      cmd = "TSPlaygroundToggle",
     },
+  },
+  -- Register the custom out-of-tree Bluespec (bsv) parser. On the `main` branch this is
+  -- done via the `User TSUpdate` event rather than `get_parser_configs()`. With
+  -- `auto_install` on (AstroNvim default), opening a `bsv` buffer installs it on demand;
+  -- you can also run `:TSInstall bsv` manually.
+  {
+    "nvim-treesitter/nvim-treesitter",
+    init = function()
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "TSUpdate",
+        callback = function()
+          require("nvim-treesitter.parsers").bsv = {
+            install_info = {
+              url = "https://github.com/yuyuranium/tree-sitter-bsv",
+              branch = "main",
+              -- files default to { "src/parser.c" }; bsv has no external scanner
+            },
+          }
+        end,
+      })
+    end,
   },
 }

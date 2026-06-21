@@ -37,8 +37,9 @@ return {
       -- end
     },
     -- enable servers that you already have installed without mason
-    servers = vim.fn.filereadable("/etc/NIXOS") == 1 and {
+    servers = vim.fn.filereadable "/etc/NIXOS" == 1 and {
       "clangd",
+      "tinymist",
       "nil_ls",
     } or {},
     -- customize language server configuration options passed to `lspconfig`
@@ -90,15 +91,15 @@ return {
           function() require("astrolsp.toggles").buffer_semantic_tokens() end,
           desc = "Toggle LSP semantic highlight (buffer)",
           cond = function(client)
-            return client.supports_method "textDocument/semanticTokens/full" and vim.lsp.semantic_tokens ~= nil
+            return client:supports_method "textDocument/semanticTokens/full" and vim.lsp.semantic_tokens ~= nil
           end,
         },
         ["<Leader>lj"] = {
-          function() vim.diagnostic.goto_next() end,
+          function() vim.diagnostic.jump { count = 1, float = true } end,
           desc = "Next diagnostic",
         },
         ["<Leader>lk"] = {
-          function() vim.diagnostic.goto_prev() end,
+          function() vim.diagnostic.jump { count = -1, float = true } end,
           desc = "Previous diagnostic",
         },
       },
