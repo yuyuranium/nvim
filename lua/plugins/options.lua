@@ -39,6 +39,20 @@ local options = {
   },
 }
 
+-- Over SSH, sync yanks to the local clipboard via the built-in OSC 52 provider.
+-- copy goes out through OSC 52; paste reads the local register (no terminal query,
+-- which would hang on terminals that don't answer OSC 52 reads). Locally, Neovim
+-- keeps using the system clipboard provider.
+if vim.env.SSH_TTY then
+  local osc52 = require "vim.ui.clipboard.osc52"
+  local function paste() return vim.split(vim.fn.getreg "", "\n") end
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = { ["+"] = osc52.copy "+", ["*"] = osc52.copy "*" },
+    paste = { ["+"] = paste, ["*"] = paste },
+  }
+end
+
 return {
   {
     "AstroNvim/astrocore",
